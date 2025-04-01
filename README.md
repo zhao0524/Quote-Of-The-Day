@@ -34,6 +34,9 @@ npm start
 - The app calls ZenQuotes via relative paths, e.g. `fetch('/api/random')`. CRA forwards that to `https://zenquotes.io/api/random` while you run `npm start`.
 - Note: The CRA dev proxy only works in development. For production, use a tiny proxy endpoint or a ZenQuotes plan that enables CORS.
 
+## Keyboard shortcuts
+- `Space` — fetch a new quote
+
 ## Commands
 - `npm start` — run locally with hot reload
 - `npm run build` — production build
