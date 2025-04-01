@@ -119,6 +119,7 @@ function App() {
           </h1>
           <button
             onClick={toggleDarkMode}
+            aria-label="Toggle dark mode"
             className={`p-3 rounded-full transition-all duration-200 ${
               isDarkMode 
                 ? 'bg-white/20 hover:bg-white/30 text-white' 
