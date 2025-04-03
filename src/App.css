@@ -71,3 +71,12 @@
 .shortcut-hint {
   animation: slideInDown 0.4s ease-out;
 }
+
+/* Improved loading pulse */
+@keyframes loadingPulse {
+  0%, 100% { opacity: 0.4; transform: scale(0.95); }
+  50%       { opacity: 1;   transform: scale(1); }
+}
+.loading-pulse {
+  animation: loadingPulse 1.5s ease-in-out infinite;
+}
