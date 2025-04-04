@@ -15,6 +15,7 @@ function App() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
   const [favorites, setFavorites] = useState<Quote[]>([]);
+  // favorites loaded from localStorage on mount
 
   const fetchQuote = useCallback(async () => {
     try {
