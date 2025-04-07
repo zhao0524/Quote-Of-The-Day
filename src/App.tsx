@@ -72,6 +72,7 @@ function App() {
   };
 
   const isFavorited = quote ? favorites.some(f => f.q === quote.q) : false;
+  // prevents duplicate favorites via .some() check
 
   const handleShare = () => {
     if (!quote) return;
