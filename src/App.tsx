@@ -117,7 +117,7 @@ function App() {
               <span className={`text-sm font-medium px-2 py-1 rounded-full ${
                 isDarkMode ? 'bg-white/10 text-white/80' : 'bg-black/10 text-black/80'
               }`}>
-                ❤️ {favorites.length}
+                ❤️ {favorites.length} saved
               </span>
             )}
             <button
