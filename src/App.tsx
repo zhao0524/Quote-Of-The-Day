@@ -15,7 +15,7 @@ function App() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
   const [favorites, setFavorites] = useState<Quote[]>([]);
-  // favorites loaded from localStorage on mount
+  // favorites persisted to localStorage via useEffect
 
   const fetchQuote = useCallback(async () => {
     try {
