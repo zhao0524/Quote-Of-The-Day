@@ -40,6 +40,7 @@ function App() {
     } finally {
       setLoading(false);
       setIsRefreshing(false);
+      // quoteKey and quotesViewed updated in fetchQuote
     }
   }, [quote]);
 
