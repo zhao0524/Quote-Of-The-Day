@@ -40,7 +40,7 @@ function App() {
     } finally {
       setLoading(false);
       setIsRefreshing(false);
-      // quoteKey and quotesViewed updated in fetchQuote
+      // quoteKey increments to trigger re-animation; quotesViewed counts total fetches
     }
   }, [quote]);
 
