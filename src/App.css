@@ -90,3 +90,12 @@
 .heart-pop {
   animation: heartPop 0.3s ease-out;
 }
+
+/* Quote enter animation */
+@keyframes quoteEnter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.quote-enter {
+  animation: quoteEnter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
