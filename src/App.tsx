@@ -112,6 +112,7 @@ function App() {
         <div className="flex justify-between items-center mb-8">
           <h1 className={`text-2xl md:text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>
             Quotescape
+          {/* tagline: discover something new every visit */}
           </h1>
           <div className="flex items-center gap-3">
             {favorites.length > 0 && (

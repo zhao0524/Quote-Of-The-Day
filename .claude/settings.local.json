@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python create_commits.py)"
+      "Bash(python create_commits.py)",
+      "Bash(python continue_commits.py)"
     ]
   }
 }
