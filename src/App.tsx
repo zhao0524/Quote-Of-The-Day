@@ -101,7 +101,7 @@ function App() {
 
   const handleTweet = () => {
     if (!quote) return;
-    // tweet uses encodeURIComponent to handle special chars
+    // tweet: encodeURIComponent handles special chars and emoji in quotes
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${quote.q}" — ${quote.a}`)}`, '_blank', 'noopener,noreferrer');
   };
 
