@@ -7,6 +7,14 @@ interface Quote {
   a: string;
 }
 
+type FontSize = 'sm' | 'md' | 'lg';
+
+const FONT_CLASSES: Record<FontSize, string> = {
+  sm: 'text-xl md:text-2xl lg:text-3xl',
+  md: 'text-2xl md:text-3xl lg:text-4xl',
+  lg: 'text-3xl md:text-4xl lg:text-5xl',
+};
+
 function App() {
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(true);
@@ -14,8 +22,25 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [favorites, setFavorites] = useState<Quote[]>([]);
-  // favorites persisted to localStorage via useEffect
+  const [favorites, setFavorites] = useState<Quote[]>(() => {
+    try { return JSON.parse(localStorage.getItem('qotd_favorites') || '[]'); }
+    catch { return []; }
+  });
+  const [quoteKey, setQuoteKey] = useState(0);
+  const [quotesViewed, setQuotesViewed] = useState(() =>
+    parseInt(localStorage.getItem('qotd_viewed') || '0', 10) || 0
+  );
+  const [fontSize, setFontSize] = useState<FontSize>('md');
+
+  // Persist favorites
+  useEffect(() => {
+    localStorage.setItem('qotd_favorites', JSON.stringify(favorites));
+  }, [favorites]);
+
+  // Persist viewed count
+  useEffect(() => {
+    localStorage.setItem('qotd_viewed', String(quotesViewed));
+  }, [quotesViewed]);
 
   const fetchQuote = useCallback(async () => {
     try {
@@ -35,12 +60,13 @@ function App() {
       }
       if (!fetched) throw new Error('Failed to fetch a new quote');
       setQuote(fetched);
+      setQuoteKey(k => k + 1);
+      setQuotesViewed(v => v + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
       setIsRefreshing(false);
-      // quoteKey increments to trigger re-animation; quotesViewed counts total fetches
     }
   }, [quote]);
 
@@ -49,7 +75,6 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Keyboard shortcut: Space = new quote
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.code === 'Space' && (e.target as HTMLElement) === document.body) {
@@ -73,7 +98,12 @@ function App() {
   };
 
   const isFavorited = quote ? favorites.some(f => f.q === quote.q) : false;
-  // prevents duplicate favorites via .some() check
+
+  const handleTweet = () => {
+    if (!quote) return;
+    // tweet uses encodeURIComponent to handle special chars
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`"${quote.q}" — ${quote.a}`)}`, '_blank', 'noopener,noreferrer');
+  };
 
   const handleShare = () => {
     if (!quote) return;
@@ -102,6 +132,10 @@ function App() {
 
   const toggleDarkMode = () => setIsDarkMode(prev => !prev);
 
+  const charCount = quote ? quote.q.length : 0;
+  // quoteLength: '' | 'Short' | 'Medium' | 'Long'
+  const quoteLength = charCount === 0 ? '' : charCount < 80 ? 'Short' : charCount < 180 ? 'Medium' : 'Long';
+
   return (
     <div className={`bg-crossfade bg-transition ${isDarkMode ? 'dark-mode-bg' : 'light-mode-bg'}`}>
       <div className={`bg-layer light ${!isDarkMode ? 'visible' : ''}`}></div>
@@ -112,7 +146,6 @@ function App() {
         <div className="flex justify-between items-center mb-8">
           <h1 className={`text-2xl md:text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-black'}`}>
             Quotescape
-          {/* tagline: discover something new every visit */}
           </h1>
           <div className="flex items-center gap-3">
             {favorites.length > 0 && (
@@ -122,6 +155,26 @@ function App() {
                 ❤️ {favorites.length} saved
               </span>
             )}
+            <div className="flex items-center gap-1">
+              <button onClick={() => setFontSize('sm')} aria-label="Small font"
+                className={`w-7 h-7 rounded text-xs font-bold transition-colors duration-150 ${
+                  fontSize === 'sm'
+                    ? isDarkMode ? 'bg-white/40 text-white' : 'bg-black/40 text-white'
+                    : isDarkMode ? 'bg-white/10 text-white/70 hover:bg-white/20' : 'bg-black/10 text-black/70 hover:bg-black/20'
+                }`}>A</button>
+              <button onClick={() => setFontSize('md')} aria-label="Medium font"
+                className={`w-8 h-8 rounded text-sm font-bold transition-colors duration-150 ${
+                  fontSize === 'md'
+                    ? isDarkMode ? 'bg-white/40 text-white' : 'bg-black/40 text-white'
+                    : isDarkMode ? 'bg-white/10 text-white/70 hover:bg-white/20' : 'bg-black/10 text-black/70 hover:bg-black/20'
+                }`}>A</button>
+              <button onClick={() => setFontSize('lg')} aria-label="Large font"
+                className={`w-9 h-9 rounded text-base font-bold transition-colors duration-150 ${
+                  fontSize === 'lg'
+                    ? isDarkMode ? 'bg-white/40 text-white' : 'bg-black/40 text-white'
+                    : isDarkMode ? 'bg-white/10 text-white/70 hover:bg-white/20' : 'bg-black/10 text-black/70 hover:bg-black/20'
+                }`}>A</button>
+            </div>
             <button
               onClick={toggleDarkMode}
               aria-label="Toggle dark mode"
@@ -134,14 +187,12 @@ function App() {
           </div>
         </div>
 
-        {/* Title */}
         <div className="text-center mb-8">
           <h2 className={`text-4xl md:text-6xl font-bold mb-4 ${isDarkMode ? 'neon-title' : 'text-black'}`}>
             Quote of the Day
           </h2>
         </div>
 
-        {/* Card */}
         <div className="max-w-4xl mx-auto">
           <div className={`rounded-2xl p-8 md:p-12 ${isDarkMode ? 'glass-card-dark' : 'glass-card'}`}>
             {loading ? (
@@ -152,23 +203,32 @@ function App() {
             ) : error ? (
               <div className="text-center py-12">
                 <div className="text-6xl mb-4">⚠️</div>
-                <h3 className="text-xl font-semibold mb-2 text-red-400">Oops! Something went wrong</h3>
+                <h3 className="text-xl font-semibold mb-2 text-red-400">Unable to load quote</h3>
                 <p className={`mb-4 ${isDarkMode ? 'text-white/80' : 'text-black/80'}`}>{error}</p>
                 <button onClick={handleRefresh} className="bg-red-500/80 hover:bg-red-600/80 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200">
                   Try Again
                 </button>
+                {/* auto-retry could be added here */}
               </div>
             ) : quote ? (
-              <div className="text-center">
-                <div className="mb-8">
-                  <blockquote className={`text-2xl md:text-3xl lg:text-4xl font-light italic leading-relaxed ${isDarkMode ? 'text-white' : 'text-black'}`}>
+              <div className="text-center" key={quoteKey}>
+                <div className="mb-6 quote-enter">
+                  <blockquote className={`${FONT_CLASSES[fontSize]} font-light italic leading-relaxed ${isDarkMode ? 'text-white' : 'text-black'}`}>
                     "{quote.q}"
                   </blockquote>
                 </div>
-                <div className="mb-8">
+                <div className="mb-2">
                   <cite className={`text-lg md:text-xl font-medium not-italic ${isDarkMode ? 'text-white/90' : 'text-black/90'}`}>
                     — {quote.a}
                   </cite>
+                </div>
+                <div className="mb-8 flex items-center justify-center gap-2">
+                  {quoteLength && (
+                    <span className={`text-xs px-2 py-0.5 rounded-full border quote-badge ${
+                      isDarkMode ? 'border-white/20 text-white/50' : 'border-black/20 text-black/50'
+                    }`}>{quoteLength}</span>
+                  )}
+                  <span className={`text-xs char-count ${isDarkMode ? 'text-white/40' : 'text-black/40'}`}>{charCount} chars</span>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center flex-wrap">
                   <button
@@ -178,7 +238,7 @@ function App() {
                     className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
                       isRefreshing ? 'bg-gray-400/50 cursor-not-allowed text-white'
                         : isDarkMode ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg'
-                        : 'bg-gradient-to-r from-blue-400 to-teal-400 hover:from-blue-500 hover:to-teal-500 text-white shadow-lg'
+                        : 'bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white shadow-lg'
                     }`}
                   >
                     {isRefreshing ? (
@@ -188,37 +248,39 @@ function App() {
                     )}
                   </button>
 
-                  <button
-                    onClick={handleFavorite}
+                  <button onClick={handleFavorite}
                     aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
                     className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors duration-200 ${
                       isDarkMode ? 'bg-white/20 hover:bg-white/30 text-white border border-white/20'
-                        : 'bg-white/80 hover:bg-white/90 text-black border border-black/10'
-                    }`}
-                  >
-                    <span>{isFavorited ? '❤️' : '🤍'}</span>
-                    {isFavorited ? 'Saved' : 'Favorite'}
+                        : 'bg-white/85 hover:bg-white/95 text-black border border-black/15'
+                    }`}>
+                    <span>{isFavorited ? '❤️' : '🤍'}</span>{isFavorited ? 'Saved' : 'Favorite'}
                   </button>
 
-                  <button
-                    onClick={handleCopy}
+                  <button onClick={handleCopy}
                     aria-label="Copy quote to clipboard"
                     className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors duration-200 ${
                       isDarkMode ? 'bg-white/20 hover:bg-white/30 text-white border border-white/20'
-                        : 'bg-white/80 hover:bg-white/90 text-black border border-black/10'
-                    }`}
-                  >
+                        : 'bg-white/85 hover:bg-white/95 text-black border border-black/15'
+                    }`}>
                     <span>📋</span>{copied ? 'Copied!' : 'Copy'}
                   </button>
 
-                  <button
-                    onClick={handleShare}
+                  <button onClick={handleTweet}
+                    aria-label="Share on Twitter"
+                    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors duration-200 ${
+                      isDarkMode ? 'bg-sky-500/70 hover:bg-sky-500/90 text-white border border-sky-400/30'
+                        : 'bg-sky-500/80 hover:bg-sky-600/80 text-white'
+                    }`}>
+                    <span>🐦</span>Tweet
+                  </button>
+
+                  <button onClick={handleShare}
                     aria-label="Share this quote"
                     className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors duration-200 ${
                       isDarkMode ? 'bg-white/20 hover:bg-white/30 text-white border border-white/20'
-                        : 'bg-white/80 hover:bg-white/90 text-black border border-black/10'
-                    }`}
-                  >
+                        : 'bg-white/85 hover:bg-white/95 text-black border border-black/15'
+                    }`}>
                     <span>📤</span>Share
                   </button>
                 </div>
@@ -228,9 +290,15 @@ function App() {
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-12 space-y-2">
           <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            Press <kbd className="px-1 py-0.5 rounded text-xs font-mono border border-current opacity-70">Space</kbd> for a new quote
+            Powered by{" "}
+            <a href="https://zenquotes.io" target="_blank" rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:opacity-80 transition-opacity">ZenQuotes</a>
+          </p>
+          <p className={`text-xs ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`}>
+            {quotesViewed > 0 && `${quotesViewed} quotes explored · `}
+            Press{" "}<kbd className="px-1 py-0.5 rounded text-xs font-mono border border-current opacity-70">Space</kbd>{" "}for a new quote
           </p>
         </div>
       </div>
