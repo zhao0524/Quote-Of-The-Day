@@ -292,7 +292,7 @@ function App() {
         {/* Footer */}
         <div className="text-center mt-12 space-y-2">
           <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-            Powered by{" "}
+            Powered by{" "}{/* ZenQuotes provides the quotes API */}
             <a href="https://zenquotes.io" target="_blank" rel="noopener noreferrer"
               className="underline underline-offset-2 hover:opacity-80 transition-opacity">ZenQuotes</a>
           </p>
