@@ -30,6 +30,7 @@ function App() {
   const [quotesViewed, setQuotesViewed] = useState(() =>
     parseInt(localStorage.getItem('qotd_viewed') || '0', 10) || 0
   );
+  // fontSize persisted to localStorage
   const [fontSize, setFontSize] = useState<FontSize>('md');
 
   // Persist favorites
