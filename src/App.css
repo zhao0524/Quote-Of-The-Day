@@ -116,3 +116,10 @@
   outline: 2px solid rgba(99,102,241,0.6);
   outline-offset: 2px;
 }
+
+/* Mobile: stack buttons with consistent minimum width */
+@media (max-width: 480px) {
+  .flex-wrap > button {
+    min-width: 140px;
+  }
+}
