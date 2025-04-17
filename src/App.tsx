@@ -229,7 +229,7 @@ function App() {
                       isDarkMode ? 'border-white/20 text-white/50' : 'border-black/20 text-black/50'
                     }`}>{quoteLength}</span>
                   )}
-                  <span className={`text-xs char-count ${isDarkMode ? 'text-white/40' : 'text-black/40'}`}>{charCount} chars</span>
+                  <span className={`text-xs char-count tabular-nums ${isDarkMode ? 'text-white/40' : 'text-black/40'}`}>{charCount} chars</span>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center flex-wrap">
                   <button
