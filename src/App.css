@@ -123,3 +123,9 @@
     min-width: 140px;
   }
 }
+
+/* Character count and tabular numbers */
+.char-count {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
