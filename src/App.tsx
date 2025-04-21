@@ -28,7 +28,7 @@ function App() {
   });
   const [quoteKey, setQuoteKey] = useState(0);
   const [quotesViewed, setQuotesViewed] = useState(() =>
-    Math.max(0, parseInt(localStorage.getItem('qotd_viewed') || '0', 10))
+    parseInt(localStorage.getItem('qotd_viewed') || '0', 10) || 0
   );
   // fontSize: sm|md|lg controls quote text size via FONT_CLASSES map
   const [fontSize, setFontSize] = useState<FontSize>('md');
