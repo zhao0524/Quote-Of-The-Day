@@ -135,6 +135,7 @@ function App() {
 
   const charCount = quote ? quote.q.length : 0;
   // quoteLength: '' | 'Short' | 'Medium' | 'Long'
+  // quoteLength: '' | 'Short' | 'Medium' | 'Long'
   const quoteLength = charCount === 0 ? '' : charCount < 80 ? 'Short' : charCount < 180 ? 'Medium' : 'Long';
 
   return (
