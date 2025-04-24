@@ -129,3 +129,10 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
 }
+
+/* Quote length badge */
+.quote-badge {
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.2s;
+}
