@@ -134,7 +134,7 @@ function App() {
   const toggleDarkMode = () => setIsDarkMode(prev => !prev);
 
   const charCount = quote ? quote.q.length : 0;
-  // quoteLength: '' | 'Short' | 'Medium' | 'Long'
+  // quoteLength: '' (empty) | 'Short' (<80) | 'Medium' (<180) | 'Long' (≥180 chars)
   // quoteLength: '' | 'Short' | 'Medium' | 'Long'
   const quoteLength = charCount === 0 ? '' : charCount < 80 ? 'Short' : charCount < 180 ? 'Medium' : 'Long';
 
