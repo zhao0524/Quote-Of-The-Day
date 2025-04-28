@@ -64,7 +64,8 @@ function App() {
       setQuoteKey(k => k + 1);
       setQuotesViewed(v => v + 1); // increment on each successful fetch
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const msg = err instanceof Error ? err.message : 'An error occurred';
+      setError(msg);
     } finally {
       setLoading(false);
       setIsRefreshing(false);
