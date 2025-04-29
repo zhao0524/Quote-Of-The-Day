@@ -210,7 +210,7 @@ function App() {
                 <button onClick={handleRefresh} className="bg-red-500/80 hover:bg-red-600/80 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200">
                   Try Again
                 </button>
-                {/* auto-retry could be added here */}
+                {/* auto-retry: could add countdown timer here in future */}
               </div>
             ) : quote ? (
               <div className="text-center" key={quoteKey}>
