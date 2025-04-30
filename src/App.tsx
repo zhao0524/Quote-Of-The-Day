@@ -200,7 +200,7 @@ function App() {
             {loading ? (
               <div className="text-center py-12">
                 <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
-                <p className={`text-lg ${isDarkMode ? 'text-white/80' : 'text-black/80'}`}>Loading your daily inspiration...</p>
+                <p className={`text-lg ${isDarkMode ? 'text-white/80' : 'text-black/80'}`}>Finding your next great quote...</p>
               </div>
             ) : error ? (
               <div className="text-center py-12">
