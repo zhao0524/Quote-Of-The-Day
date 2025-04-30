@@ -62,7 +62,7 @@ function App() {
       if (!fetched) throw new Error('Failed to fetch a new quote');
       setQuote(fetched);
       setQuoteKey(k => k + 1);
-      setQuotesViewed(v => v + 1); // increment on each successful fetch
+      setQuotesViewed(v => v + 1); 
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
