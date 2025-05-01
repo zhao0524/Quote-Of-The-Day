@@ -91,7 +91,7 @@
   animation: heartPop 0.3s ease-out;
 }
 
-/* Quote enter animation - triggered via key prop change */
+/* Quote enter animation - triggered via React key prop on quote container */
 @keyframes quoteEnter {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
