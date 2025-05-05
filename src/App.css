@@ -149,3 +149,9 @@
   100% { transform: scale(1); }
 }
 .copy-success { animation: copySuccess 0.25s ease-out; }
+
+/* Settings panel backdrop blur */
+.settings-panel {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
