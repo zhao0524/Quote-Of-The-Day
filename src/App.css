@@ -155,3 +155,12 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
+
+/* Settings panel mobile overflow fix */
+@media (max-width: 480px) {
+  .settings-panel {
+    right: -0.5rem;
+    width: calc(100vw - 2rem);
+    max-width: 18rem;
+  }
+}
