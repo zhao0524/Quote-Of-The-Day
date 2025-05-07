@@ -210,7 +210,7 @@ function App() {
               ))}
             </div>
             <div className="relative" ref={settingsRef}>
-              <button onClick={() => setShowSettings(v => !v)} aria-label="Open settings"
+              <button onClick={() => setShowSettings(v => !v)} aria-label="Settings"
                 className={`p-2.5 rounded-full transition-all duration-200 text-lg ${isDarkMode ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-black/20 hover:bg-black/30 text-black'}`}>⚙️</button>
               {showSettings && (
                 <div className={`absolute right-0 top-12 w-72 rounded-xl p-4 z-50 shadow-2xl settings-panel ${
