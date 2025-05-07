@@ -164,3 +164,14 @@
     max-width: 18rem;
   }
 }
+
+/* Focus-visible for keyboard nav */
+:focus-visible {
+  outline: 2px solid rgba(99,102,241,0.7);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+button:focus-visible {
+  outline: 2px solid rgba(99,102,241,0.7);
+  outline-offset: 2px;
+}
