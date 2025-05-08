@@ -19,7 +19,7 @@ function App() {
   const [quote, setQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  // Theme stored in localStorage; useState initializer prevents flash on reload
+  // Theme persisted; initializer reads localStorage to avoid flash on reload
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() =>
     localStorage.getItem('qotd_theme') === 'dark'
   );
