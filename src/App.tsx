@@ -138,7 +138,7 @@ function App() {
     );
   };
 
-  // handleShare: uses Web Share API where available, falls back to clipboard
+  // handleShare: prefers native share sheet, falls back to clipboard copy
   const handleShare = () => {
     if (!quote) return;
     const text = `"${quote.q}" — ${quote.a}`;
