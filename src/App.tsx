@@ -129,7 +129,7 @@ function App() {
 
   const isFavorited = quote ? favorites.some(f => f.q === quote.q) : false;
 
-  // Twitter / X intent URL — twitter.com and x.com both work
+  // Twitter / X share — intent URL works on twitter.com and x.com
   const handleTweet = () => {
     if (!quote) return;
     window.open(
