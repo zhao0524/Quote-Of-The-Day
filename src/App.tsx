@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import './backgrounds.css';
 
 interface Quote {
   q: string;
@@ -94,54 +95,69 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
-      isDarkMode 
-        ? 'bg-gray-900 text-white' 
-        : 'bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-800'
+    <div className={`min-h-screen bg-transition ${
+      isDarkMode ? 'dark-mode-bg' : 'light-mode-bg'
     }`}>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 relative z-10">
         {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <h1 className={`text-2xl md:text-3xl font-bold ${
+            isDarkMode ? 'text-white' : 'text-black'
+          }`}>
+            Quotescape
+          </h1>
+          <button
+            onClick={toggleDarkMode}
+            className={`p-3 rounded-full transition-all duration-200 ${
+              isDarkMode 
+                ? 'bg-white/20 hover:bg-white/30 text-white' 
+                : 'bg-black/20 hover:bg-black/30 text-black'
+            }`}
+          >
+            <span className="text-xl">{isDarkMode ? '☀️' : '🌙'}</span>
+          </button>
+        </div>
+
+        {/* Main Content */}
         <div className="text-center mb-8">
-          <h1 className={`text-4xl md:text-6xl font-bold mb-4 ${
-            isDarkMode ? 'text-white' : 'text-gray-800'
+          <h2 className={`text-4xl md:text-6xl font-bold mb-4 ${
+            isDarkMode ? 'neon-title' : 'text-black'
           }`}>
             Quote of the Day
-          </h1>
+          </h2>
           <p className={`text-lg ${
-            isDarkMode ? 'text-gray-300' : 'text-gray-600'
+            isDarkMode ? 'text-white/80' : 'text-black/80'
           }`}>
-            Daily inspiration at your fingertips
+            A delightful daily dose of wisdom — tuned for neon nights and ocean light.
           </p>
         </div>
 
         {/* Main Quote Card */}
         <div className="max-w-4xl mx-auto">
-          <div className={`rounded-2xl shadow-2xl p-8 md:p-12 ${
-            isDarkMode 
-              ? 'bg-gray-800 border border-gray-700' 
-              : 'bg-white border border-gray-200'
+          <div className={`rounded-2xl p-8 md:p-12 ${
+            isDarkMode ? 'glass-card-dark' : 'glass-card'
           }`}>
             {loading ? (
               <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-white mx-auto mb-4"></div>
                 <p className={`text-lg ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                  isDarkMode ? 'text-white/80' : 'text-black/80'
                 }`}>
                   Loading your daily inspiration...
                 </p>
               </div>
             ) : error ? (
               <div className="text-center py-12">
-                <div className="text-red-500 text-6xl mb-4">⚠️</div>
-                <h3 className="text-xl font-semibold mb-2 text-red-500">Oops! Something went wrong</h3>
+                <div className="text-red-400 text-6xl mb-4">⚠️</div>
+                <h3 className="text-xl font-semibold mb-2 text-red-400">Oops! Something went wrong</h3>
                 <p className={`mb-4 ${
-                  isDarkMode ? 'text-gray-300' : 'text-gray-600'
+                  isDarkMode ? 'text-white/80' : 'text-black/80'
                 }`}>
                   {error}
                 </p>
                 <button
                   onClick={handleRefresh}
-                  className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
+                  className="bg-red-500/80 hover:bg-red-600/80 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
                 >
                   Try Again
                 </button>
@@ -150,7 +166,9 @@ function App() {
               <div className="text-center">
                 {/* Quote Text */}
                 <div className="mb-8">
-                  <blockquote className="text-2xl md:text-3xl lg:text-4xl font-light italic leading-relaxed">
+                  <blockquote className={`text-2xl md:text-3xl lg:text-4xl font-light italic leading-relaxed ${
+                    isDarkMode ? 'text-white' : 'text-black'
+                  }`}>
                     "{quote.q}"
                   </blockquote>
                 </div>
@@ -158,7 +176,7 @@ function App() {
                 {/* Author */}
                 <div className="mb-8">
                   <cite className={`text-lg md:text-xl font-medium not-italic ${
-                    isDarkMode ? 'text-blue-400' : 'text-blue-600'
+                    isDarkMode ? 'text-white/90' : 'text-black/90'
                   }`}>
                     — {quote.a}
                   </cite>
@@ -171,10 +189,10 @@ function App() {
                     disabled={isRefreshing}
                     className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
                       isRefreshing
-                        ? 'bg-gray-400 cursor-not-allowed'
+                        ? 'bg-gray-400/50 cursor-not-allowed text-white'
                         : isDarkMode
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
-                        : 'bg-blue-500 hover:bg-blue-600 text-white'
+                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg'
+                        : 'bg-gradient-to-r from-blue-400 to-teal-400 hover:from-blue-500 hover:to-teal-500 text-white shadow-lg'
                     }`}
                   >
                     {isRefreshing ? (
@@ -185,7 +203,7 @@ function App() {
                     ) : (
                       <>
                         <span>🔄</span>
-                        New Quote
+                        New quote
                       </>
                     )}
                   </button>
@@ -194,12 +212,24 @@ function App() {
                     onClick={handleShare}
                     className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors duration-200 ${
                       isDarkMode
-                        ? 'bg-green-600 hover:bg-green-700 text-white'
-                        : 'bg-green-500 hover:bg-green-600 text-white'
+                        ? 'bg-white/20 hover:bg-white/30 text-white border border-white/20'
+                        : 'bg-white/80 hover:bg-white/90 text-black border border-black/10'
+                    }`}
+                  >
+                    <span>📋</span>
+                    Copy
+                  </button>
+
+                  <button
+                    onClick={handleShare}
+                    className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors duration-200 ${
+                      isDarkMode
+                        ? 'bg-white/20 hover:bg-white/30 text-white border border-white/20'
+                        : 'bg-white/80 hover:bg-white/90 text-black border border-black/10'
                     }`}
                   >
                     <span>📤</span>
-                    Share Quote
+                    Share
                   </button>
                 </div>
               </div>
@@ -207,27 +237,11 @@ function App() {
           </div>
         </div>
 
-        {/* Dark Mode Toggle */}
-        <div className="text-center mt-8">
-          <button
-            onClick={toggleDarkMode}
-            className={`flex items-center gap-2 mx-auto px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
-              isDarkMode
-                ? 'bg-gray-700 hover:bg-gray-600 text-white'
-                : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-            }`}
-          >
-            <span>{isDarkMode ? '☀️' : '🌙'}</span>
-            {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-          </button>
-        </div>
-
         {/* Footer */}
         <div className="text-center mt-12">
           <p className={`text-sm ${
             isDarkMode ? 'text-gray-400' : 'text-gray-500'
           }`}>
-            Powered by Multiple Quote APIs • Built with React, TypeScript & Tailwind CSS
           </p>
         </div>
       </div>
