@@ -91,9 +91,11 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen bg-transition ${
-      isDarkMode ? 'dark-mode-bg' : 'light-mode-bg'
-    }`}>
+    <div className={`bg-crossfade bg-transition ${isDarkMode ? 'dark-mode-bg' : 'light-mode-bg'}`}>
+      {/* Crossfade layers */}
+      <div className={`bg-layer light ${!isDarkMode ? 'visible' : ''}`}></div>
+      <div className={`bg-layer dark ${isDarkMode ? 'visible' : ''}`}></div>
+
       <div className="container mx-auto px-4 py-8 relative z-10">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
@@ -124,7 +126,6 @@ function App() {
           <p className={`text-lg ${
             isDarkMode ? 'text-white/80' : 'text-black/80'
           }`}>
-            A delightful daily dose of wisdom — tuned for neon nights and ocean light.
           </p>
         </div>
 

@@ -1,43 +1,51 @@
 /* Background styles for Quote of the Day app */
 
-/* Light Mode - Ocean/Beach Background */
-.light-mode-bg {
-  background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  min-height: 100vh;
-  position: relative;
+:root {
+  --ocean-url: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2073&q=80');
+  --city-url:  url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=2025&q=80');
 }
 
-.light-mode-bg::before {
-  content: '';
+/* Crossfade container */
+.bg-crossfade {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.bg-layer {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  pointer-events: none;
-}
-
-/* Dark Mode - Cyberpunk City Background */
-.dark-mode-bg {
-  background-image: url('https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2025&q=80');
+  inset: 0;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  min-height: 100vh;
+  opacity: 0;
+  transition: opacity 600ms ease-in-out, filter 600ms ease-in-out;
+  will-change: opacity, filter;
+}
+
+.bg-layer.visible {
+  opacity: 1;
+}
+
+/* Light and Dark layers */
+.bg-layer.light {
+  background-image: var(--ocean-url);
+  filter: saturate(105%) brightness(105%);
+}
+
+.bg-layer.dark {
+  background-image: var(--city-url);
+  filter: saturate(115%) brightness(80%);
+}
+
+/* Keep existing classes for overlays and glass */
+.light-mode-bg,
+.dark-mode-bg {
   position: relative;
 }
 
-/* Vignette */
+/* Vignette / neon for dark mode */
 .dark-mode-bg::before {
   content: '';
   position: absolute;
@@ -47,7 +55,6 @@
   pointer-events: none;
 }
 
-/* Neon glow wash */
 .dark-mode-bg::after {
   content: '';
   position: absolute;
@@ -59,7 +66,7 @@
   pointer-events: none;
 }
 
-/* Glassmorphism effect for cards */
+/* Glassmorphism */
 .glass-card {
   background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px);
@@ -76,7 +83,6 @@
   box-shadow: 0 10px 40px rgba(0,0,0,0.6), 0 0 80px rgba(170, 85, 255, 0.15);
 }
 
-/* Neon title */
 .neon-title {
   color: #ffffff;
   text-shadow:
@@ -85,15 +91,12 @@
     0 0 36px rgba(88,101,242,0.45);
 }
 
-/* Smooth transitions */
 .bg-transition {
-  transition: all 0.5s ease-in-out;
+  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
-  .light-mode-bg,
-  .dark-mode-bg {
+  .bg-layer {
     background-attachment: scroll;
   }
 }
