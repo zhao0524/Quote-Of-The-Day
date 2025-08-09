@@ -1,143 +1,64 @@
-# Quote of the Day App
+# Quotescape — Quote of the Day
 
-A beautiful, responsive web application that displays daily inspirational quotes using the ZenQuotes API. Built with React, TypeScript, and Tailwind CSS.
+A small React + TypeScript app that shows a random quote from ZenQuotes with a polished UI. Light mode features an ocean/beach scene; dark mode features a cyberpunk city scene with neon accents. Styled with Tailwind CSS.
 
-## 🌟 Features
+## Features
+- Random quote from ZenQuotes (`/api/random`)
+- New quote button with cache-busting and duplicate-avoidance
+- Copy to clipboard + Share
+- Light/Dark themes with smooth cross-fade background images (ocean ↔ cyberpunk)
+- Glassmorphism card, responsive layout
 
-### Core Functionality
-- **Daily Quote Display**: Fetches and displays random inspirational quotes from ZenQuotes API
-- **Author Attribution**: Shows the author of each quote
-- **Refresh Functionality**: Get new quotes on demand
+## Tech
+- React (CRA) + TypeScript
+- Tailwind CSS
+- ZenQuotes API
 
-### Enhanced Features
-- **Dark/Light Mode Toggle**: Switch between dark and light themes
-- **Share Quotes**: Share quotes via native sharing API or copy to clipboard
-- **Loading States**: Smooth loading animations and error handling
-- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Smooth Animations**: Elegant transitions and hover effects
-- **Error Handling**: Graceful error handling with retry functionality
-
-### Technical Features
-- **TypeScript**: Full type safety and better development experience
-- **Tailwind CSS**: Utility-first CSS framework for rapid UI development
-- **Modern React**: Built with functional components and hooks
-- **API Integration**: Seamless integration with ZenQuotes API
-- **Accessibility**: Keyboard navigation and screen reader friendly
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js (version 14 or higher)
-- npm or yarn package manager
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/Quote-Of-The-Day.git
-   cd Quote-Of-The-Day
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm start
-   ```
-
-4. **Open your browser**
-   Navigate to `http://localhost:3000` to view the application
-
-### Building for Production
-
-```bash
-npm run build
+## Getting started
+1) Install dependencies
 ```
+npm install
+```
+2) Start the dev server
+```
+npm start
+```
+3) Open `http://localhost:3000`
 
-This creates an optimized production build in the `build` folder.
+## ZenQuotes and CORS (dev proxy)
+- This project uses CRA’s built-in dev proxy to avoid CORS during local development.
+- `package.json` contains:
+```
+"proxy": "https://zenquotes.io"
+```
+- The app calls ZenQuotes via relative paths, e.g. `fetch('/api/random')`. CRA forwards that to `https://zenquotes.io/api/random` while you run `npm start`.
+- Note: The CRA dev proxy only works in development. For production, use a tiny proxy endpoint or a ZenQuotes plan that enables CORS.
 
-## 🛠️ Technology Stack
+## Commands
+- `npm start` — run locally with hot reload
+- `npm run build` — production build
+- `npm test` — run tests (if any)
 
-- **Frontend Framework**: React 19.1.1
-- **Language**: TypeScript 4.9.5
-- **Styling**: Tailwind CSS 3.x
-- **Build Tool**: Create React App
-- **API**: ZenQuotes API (https://zenquotes.io/)
-
-## 📱 Usage
-
-1. **View Daily Quote**: The app automatically loads a random quote when opened
-2. **Get New Quote**: Click the "New Quote" button to fetch a different quote
-3. **Share Quote**: Use the "Share Quote" button to share via native sharing or copy to clipboard
-4. **Toggle Theme**: Switch between dark and light modes using the theme toggle button
-
-## 🎨 Design Decisions
-
-### UI/UX Choices
-- **Clean, Minimal Design**: Focus on readability and content
-- **Card-based Layout**: Modern card design with subtle shadows and rounded corners
-- **Responsive Typography**: Scalable text sizes for different screen sizes
-- **Color Psychology**: Blue theme for trust and inspiration, with proper contrast ratios
-- **Smooth Transitions**: Subtle animations enhance user experience without being distracting
-
-### Technical Decisions
-- **TypeScript**: Chosen for type safety and better development experience
-- **Tailwind CSS**: Utility-first approach for rapid development and consistent styling
-- **Functional Components**: Modern React patterns with hooks for state management
-- **Error Boundaries**: Proper error handling for better user experience
-- **Progressive Enhancement**: Works without JavaScript for basic functionality
-
-## 🔧 API Integration
-
-The app integrates with multiple quote APIs with automatic fallback:
-- **Primary**: Quotable API (`https://api.quotable.io/random`)
-- **Fallback 1**: ZenQuotes API via CORS proxy
-- **Fallback 2**: Quotes REST API (`https://quotes.rest/qod`)
-- **Response Format**: Normalized to `{ q: string, a: string }` format
-- **Error Handling**: Graceful fallback between APIs
-- **CORS Handling**: Uses multiple APIs to avoid CORS restrictions
-
-## 📁 Project Structure
-
+## File map (key files)
 ```
 src/
-├── App.tsx          # Main application component
-├── App.css          # Custom styles and animations
-├── index.tsx        # Application entry point
-└── index.css        # Global styles and Tailwind imports
+├── App.tsx            # App logic + UI (fetch, copy/share, theme toggle)
+├── backgrounds.css    # Crossfade image layers + neon overlays + glass styles
+├── index.css          # Tailwind directives
+├── index.tsx          # App entry
+tailwind.config.js     # Tailwind setup
+postcss.config.js      # PostCSS setup
 ```
 
-## 🚀 Deployment
+## Rate limit
+- ZenQuotes free tier is rate limited (~5 requests per 30 seconds per IP). The app adds a cache-busting param and retries to avoid duplicates, but you should still avoid spamming the button.
 
-The app can be deployed to any static hosting service:
+## Troubleshooting
+- Seeing CORS errors? Make sure you:
+  - Run via `npm start` (not opening `public/index.html` directly)
+  - Restart the dev server after changing `package.json` proxy
+- Getting repeated quotes? That can happen due to API randomness and limits; the app retries a few times. We can also switch to `/api/quotes` (batch) and pick a random item locally if needed.
 
-- **Netlify**: Drag and drop the `build` folder
-- **Vercel**: Connect your GitHub repository
-- **GitHub Pages**: Use `npm run deploy`
-- **AWS S3**: Upload the `build` folder to an S3 bucket
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🙏 Acknowledgments
-
-- **ZenQuotes API**: For providing the quote data
-- **React Team**: For the amazing framework
-- **Tailwind CSS**: For the utility-first CSS framework
-- **TypeScript Team**: For the type-safe JavaScript experience
-
----
-
-**Built with ❤️ using React, TypeScript, and Tailwind CSS**
+## Attribution
+- Quotes: ZenQuotes (`https://zenquotes.io`)
+- Photos: Unsplash (ocean and city background images)
