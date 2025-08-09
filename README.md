@@ -39,26 +39,6 @@ npm start
 - `npm run build` — production build
 - `npm test` — run tests (if any)
 
-## File map (key files)
-```
-src/
-├── App.tsx            # App logic + UI (fetch, copy/share, theme toggle)
-├── backgrounds.css    # Crossfade image layers + neon overlays + glass styles
-├── index.css          # Tailwind directives
-├── index.tsx          # App entry
-tailwind.config.js     # Tailwind setup
-postcss.config.js      # PostCSS setup
-```
 
 ## Rate limit
 - ZenQuotes free tier is rate limited (~5 requests per 30 seconds per IP). The app adds a cache-busting param and retries to avoid duplicates, but you should still avoid spamming the button.
-
-## Troubleshooting
-- Seeing CORS errors? Make sure you:
-  - Run via `npm start` (not opening `public/index.html` directly)
-  - Restart the dev server after changing `package.json` proxy
-- Getting repeated quotes? That can happen due to API randomness and limits; the app retries a few times. We can also switch to `/api/quotes` (batch) and pick a random item locally if needed.
-
-## Attribution
-- Quotes: ZenQuotes (`https://zenquotes.io`)
-- Photos: Unsplash (ocean and city background images)
