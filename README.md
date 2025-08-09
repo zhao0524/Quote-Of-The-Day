@@ -1,6 +1,6 @@
 # Quotescape — Quote of the Day
 
-A small React + TypeScript app that shows a random quote from ZenQuotes with a polished UI. Light mode features an ocean/beach scene; dark mode features a cyberpunk city scene with neon accents. Styled with Tailwind CSS.
+A small React + TypeScript app that shows a random quote from ZenQuotes with a polished UI. Light mode features an ocean/beach scene; dark mode features a dark background. Styled with Tailwind CSS.
 
 ## Features
 - Random quote from ZenQuotes (`/api/random`)
