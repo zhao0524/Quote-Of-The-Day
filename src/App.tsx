@@ -13,51 +13,28 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const fetchQuote = async () => {
     try {
       setError(null);
-      
-      // Try multiple quote APIs with fallback
-      const apis = [
-        'https://api.quotable.io/random',
-        'https://api.allorigins.win/raw?url=https://zenquotes.io/api/random',
-        'https://quotes.rest/qod'
-      ];
-      
-      let quoteData = null;
-      let lastError = null;
-      
-      for (const api of apis) {
-        try {
-          const response = await fetch(api);
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-          
-          const data = await response.json();
-          
-          // Handle different API response formats
-          if (api.includes('quotable.io')) {
-            quoteData = { q: data.content, a: data.author };
-          } else if (api.includes('zenquotes.io')) {
-            quoteData = data[0];
-          } else if (api.includes('quotes.rest')) {
-            quoteData = { q: data.contents.quotes[0].quote, a: data.contents.quotes[0].author };
-          }
-          
-          if (quoteData) break;
-        } catch (err) {
-          lastError = err;
-          continue;
-        }
+
+      // ZenQuotes 
+      const response = await fetch(
+        'https://api.allorigins.win/raw?url=https://zenquotes.io/api/random'
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
       }
-      
-      if (quoteData) {
-        setQuote(quoteData);
-      } else {
-        throw lastError || new Error('All quote APIs failed');
+      const data = await response.json();
+
+      // make sure this is an array of quote and author
+      const quoteData = Array.isArray(data) ? data[0] : data;
+      if (!quoteData || !quoteData.q || !quoteData.a) {
+        throw new Error('Unexpected response from ZenQuotes');
       }
+
+      setQuote({ q: quoteData.q, a: quoteData.a });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
@@ -87,6 +64,25 @@ function App() {
         navigator.clipboard.writeText(text);
         alert('Quote copied to clipboard!');
       }
+    }
+  };
+// copy the quote
+  const handleCopy = async () => {
+    if (!quote) return;
+    const text = `"${quote.q}" - ${quote.a}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch (err) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      textarea.remove();
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
     }
   };
 
@@ -209,7 +205,7 @@ function App() {
                   </button>
 
                   <button
-                    onClick={handleShare}
+                    onClick={handleCopy}
                     className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-colors duration-200 ${
                       isDarkMode
                         ? 'bg-white/20 hover:bg-white/30 text-white border border-white/20'
@@ -217,7 +213,7 @@ function App() {
                     }`}
                   >
                     <span>📋</span>
-                    Copy
+                    {copied ? 'Copied!' : 'Copy'}
                   </button>
 
                   <button
