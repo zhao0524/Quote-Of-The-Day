@@ -19,22 +19,35 @@ function App() {
     try {
       setError(null);
 
-      // ZenQuotes 
-      const response = await fetch(
-        'https://api.allorigins.win/raw?url=https://zenquotes.io/api/random'
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-      const data = await response.json();
+      let fetched: Quote | null = null;
+      const maxAttempts = 3;
 
-      // make sure this is an array of quote and author
-      const quoteData = Array.isArray(data) ? data[0] : data;
-      if (!quoteData || !quoteData.q || !quoteData.a) {
-        throw new Error('Unexpected response from ZenQuotes');
+      for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+        const cacheBuster = Date.now() + '-' + attempt;
+        const response = await fetch(`/api/random?cb=${cacheBuster}`, { cache: 'no-store' });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+
+        const quoteData = Array.isArray(data) ? data[0] : data;
+        if (!quoteData || !quoteData.q || !quoteData.a) {
+          throw new Error('Unexpected response from ZenQuotes');
+        }
+
+        fetched = { q: quoteData.q, a: quoteData.a };
+
+        // If same as current quote, try again (up to maxAttempts)
+        if (!quote || fetched.q !== quote.q) {
+          break;
+        }
       }
 
-      setQuote({ q: quoteData.q, a: quoteData.a });
+      if (!fetched) {
+        throw new Error('Failed to fetch a new quote');
+      }
+
+      setQuote(fetched);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

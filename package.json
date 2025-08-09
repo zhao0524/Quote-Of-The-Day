@@ -2,6 +2,7 @@
   "name": "quote-of-the-day",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://zenquotes.io",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.6.4",
